@@ -109,3 +109,4 @@ module.exports = {
 ```js
 ? Where should we create your project? (.) # press enter
 ```
+- Refer to the following documents: `https://aws.amazon.com/getting-started/hands-on/build-react-app-amplify-graphql/module-one/`
