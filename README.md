@@ -102,3 +102,10 @@ module.exports = {
   ],
 };
 ```
+#### Amplify configuration Front-end
+
+- Run: `npm create amplify@latest`
+
+```js
+? Where should we create your project? (.) # press enter
+```
