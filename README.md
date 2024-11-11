@@ -22,7 +22,7 @@ export default tseslint.config({
       tsconfigRootDir: import.meta.dirname,
     },
   },
-})
+});
 ```
 
 - Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
@@ -31,7 +31,7 @@ export default tseslint.config({
 
 ```js
 // eslint.config.js
-import react from 'eslint-plugin-react'
+import react from 'eslint-plugin-react';
 
 export default tseslint.config({
   // Set the react version
@@ -46,8 +46,9 @@ export default tseslint.config({
     ...react.configs.recommended.rules,
     ...react.configs['jsx-runtime'].rules,
   },
-})
+});
 ```
+
 ### Prettier configuration
 
 - Install as dev dependency: `yarn add --dev --exact prettier`
@@ -61,6 +62,7 @@ module.exports = {
   endOfLine: 'auto',
 };
 ```
+
 - Add Prettier command
 
 ```js
@@ -71,12 +73,13 @@ module.exports = {
   }
 }
 ```
+
 - Add Prettier Ignore File: `.prettierignore`
 
 node_modules
 package-lock.json
 dist
-lint-*
+lint-\*
 
 - Add Prettier ESLint Rule:
 
@@ -96,12 +99,10 @@ yarn add --dev eslint-plugin-prettier
 
 ```js
 module.exports = {
-  extends: [
-    ...
-    'plugin:prettier/recommended'
-  ],
+  extends: [...'plugin:prettier/recommended'],
 };
 ```
+
 #### Amplify configuration Front-end
 
 - Run: `npm create amplify@latest`
@@ -109,4 +110,5 @@ module.exports = {
 ```js
 ? Where should we create your project? (.) # press enter
 ```
+
 - Refer to the following documents: `https://aws.amazon.com/getting-started/hands-on/build-react-app-amplify-graphql/module-one/`
