@@ -1,13 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import CheckCircleIcon from '@/components/Icons/CheckCircleIcon';
-import SocialButton from '@/components/Button/SocialButton';
+import VerifyEmailModal from '@/components/Modal/VerifyEmailModal';
 import AuthLayout from '../../../components/Layout/AuthLayout';
+import SocialButton from '@/components/Button/SocialButton';
 import useRegisterForm from './hook';
 import { cn } from '@/utils';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { formik } = useRegisterForm();
+  const { formik, isVerifyModal, setIsVerifyModal, setVerifyCode, verifyCode, handleVerifyEmail} = useRegisterForm();
 
   return (
     <AuthLayout>
@@ -44,12 +45,16 @@ const Register: React.FC = () => {
           <span className='text-gray-500 font-normal'>OR</span>
           <span className='h-px w-16 bg-gray-300'></span>
         </div>
-        <div className='mt-8 space-y-6'>
+        <div className='mt-4'>
           <input type='hidden' name='remember' value='true' />
           <div className='relative'>
-            <div className='absolute right-0 top-1/2 -translate-y-1/2 mt-4'>
-              <CheckCircleIcon />
-            </div>
+            {
+              !formik.errors.email && (
+                <div className='absolute right-0 top-1/2 -translate-y-1/2 mt-4'>
+                  <CheckCircleIcon />
+                </div>
+              )
+            }
             <label className='text-sm font-bold text-gray-700 tracking-wide'>Email</label>
             <input
               id='email'
@@ -64,12 +69,16 @@ const Register: React.FC = () => {
               placeholder='mail@gmail.com'
             />
           </div>
-          <div className='mt-8 content-center'>
+          {formik.touched.email && formik.errors.email ? (
+            <span className='text-red-700 text-xs'>{formik.errors.email}</span>
+          ) : <span></span>}
+          <div className='mt-4 content-center'>
             <label className='text-sm font-bold text-gray-700 tracking-wide'>Password</label>
             <input
               type='text'
               id='password'
               name='password'
+              autoComplete='off'
               value={formik.values.password}
               onChange={formik.handleChange}
               className={cn(
@@ -79,12 +88,16 @@ const Register: React.FC = () => {
               placeholder='Enter your password'
             />
           </div>
-          <div className='mt-8 content-center'>
+          {formik.touched.password && formik.errors.password ? (
+            <span className='text-red-700 text-xs'>{formik.errors.password}</span>
+          ) : <span></span>}
+          <div className='mt-4 content-center'>
             <label className='text-sm font-bold text-gray-700 tracking-wide'>Confirm password</label>
             <input
               type='text'
               id='confirmPassword'
               name='confirmPassword'
+              autoComplete='off'
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               className={cn(
@@ -94,7 +107,10 @@ const Register: React.FC = () => {
               placeholder='Enter confirm password'
             />
           </div>
-          <div>
+          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+            <span className='text-red-700 text-xs'>{formik.errors.confirmPassword}</span>
+          ) : <span></span>}
+          <div className='mt-8'>
             <button
               onClick={() => formik.handleSubmit()}
               className={cn(
@@ -120,6 +136,13 @@ const Register: React.FC = () => {
           </p>
         </div>
       </div>
+      <VerifyEmailModal 
+        open={isVerifyModal}
+        verifyEmail={formik.values.email}
+        onSubmit={() => handleVerifyEmail()}
+        verifyCode={verifyCode}
+        onChangeVerifyCode={(values: string[]) => setVerifyCode(values)}
+      />
     </AuthLayout>
   );
 };

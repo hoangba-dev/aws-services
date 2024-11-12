@@ -1,9 +1,12 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = lazy(async () => await import('./pages/home'));
-const Login = lazy(async () => await import('./pages/auth/Login'));
-const Register = lazy(async () => await import('./pages/auth/Register'));
 
 function App() {
   const router = createBrowserRouter([
@@ -24,6 +27,10 @@ function App() {
   return (
     <Suspense>
       <RouterProvider router={router} />
+      <ToastContainer 
+        position='top-right'
+        theme='light'
+      />
     </Suspense>
   );
 }
