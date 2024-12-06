@@ -1,42 +1,47 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useContext } from 'react';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { confirmSignUp, signUp } from 'aws-amplify/auth';
+import { confirmSignIn, confirmSignUp, signIn } from 'aws-amplify/auth';
 import { AuthContext, AuthContextProps } from '@/components/Layout/AuthLayout';
+import { toast } from 'react-toastify';
 
-const useRegisterForm = () => {
+const useSignInForm = () => {
   const navigate = useNavigate();
-
-  const {verifyCode, setVerifyCode, isVerifyModal, setIsVerifyModal} = useContext<AuthContextProps>(AuthContext)
+  const { verifyCode, setVerifyCode, isVerifyModal, setIsVerifyModal } = useContext<AuthContextProps>(AuthContext);
 
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
-      confirmPassword: ''
+      password: ''
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid email address').required('Email is required'),
-      password: Yup.string().min(6, 'Password must be 6 characters or than').max(15, 'Password must be 15 characters or less').required('Password is required'),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password')], 'Passwords must match')
-        .required('Confirm password is required')
+      password: Yup.string()
+        .min(6, 'Password must be 6 characters or than')
+        .max(15, 'Password must be 15 characters or less')
+        .required('Password is required')
     }),
     onSubmit: async (values) => {
-      try {
-        const { nextStep } = await signUp({
-          username: values.email,
-          password: values.password
-        });
+      const { nextStep } = await signIn({
+        username: values.email,
+        password: values.password
+      });
 
-        if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
-          toast.success('Successful registration!');
-          setIsVerifyModal(true);
-        }
-      } catch (error) {
-        toast.error('Registration failed!');
+      console.log('nextStep', nextStep);
+
+      // if (nextStep.signInStep === "CONTINUE_SIGN_IN_WITH_EMAIL_SETUP") {
+      //   await confirmSignIn({
+      //     challengeResponse: values.email,
+      //   });
+      // }
+
+      if (nextStep.signInStep === 'CONFIRM_SIGN_UP') {
+        setIsVerifyModal(true);
+      }
+
+      if (nextStep.signInStep === 'DONE') {
+        navigate('/');
       }
     }
   });
@@ -49,7 +54,7 @@ const useRegisterForm = () => {
       });
       if (nextStep.signUpStep === 'DONE') {
         toast.success('Email verified successfully!');
-        navigate('/login');
+        navigate('/');
       }
     } catch (error) {
       console.log("erorr", error)
@@ -57,16 +62,16 @@ const useRegisterForm = () => {
     } finally {
       setIsVerifyModal(false);
     }
-  };
+  }
 
   return {
     formik,
+    verifyCode,
+    setVerifyCode,
     isVerifyModal,
     setIsVerifyModal,
-    verifyCode, 
-    setVerifyCode,
     handleVerifyEmail
   };
 };
 
-export default useRegisterForm;
+export default useSignInForm;

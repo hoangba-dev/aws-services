@@ -5,6 +5,8 @@ import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 
 import 'react-toastify/dist/ReactToastify.css';
+import AuthLayout from './components/Layout/AuthLayout';
+import PrivateRouter from './components/Routers/PrivateRouter';
 
 const Home = lazy(async () => await import('./pages/home'));
 
@@ -12,15 +14,23 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Home />
+      element: <PrivateRouter>
+        <Home />
+        </PrivateRouter>
     },
+    
     {
-      path: '/login',
-      element: <Login />
-    },
-    {
-      path: '/register',
-      element: <Register />
+      element: <AuthLayout />,
+      children: [
+        {
+          path: '/login',
+          element: <Login />
+        },
+        {
+          path: '/register',
+          element: <Register />
+        },
+      ]
     }
   ]);
 
