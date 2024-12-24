@@ -8,7 +8,7 @@ interface BaseButtonProps {
   color?: string;
   onClick: (event: MouseEvent<HTMLButtonElement>) => void
 }
-const BaseButton: FC<BaseButtonProps> = ({ children, variant = "default", color = "pink", disabled, onClick }) => {
+const BaseButton: FC<BaseButtonProps> = ({ children, variant = "default", color = "gray", disabled, onClick }) => {
   const baseStyles =
     "middle none center rounded-lg py-3 px-6 font-sans text-xs font-bold uppercase transition-all disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none";
 
@@ -21,11 +21,9 @@ const BaseButton: FC<BaseButtonProps> = ({ children, variant = "default", color 
 
   return (
     <button
-      className={cn(baseStyles, variants[variant], )}
+      className={cn(baseStyles, variants[variant])}
       onClick={onClick}
       disabled={disabled}
-      data-ripple-light={variant === "default" || variant === "gradient" ? "true" : undefined}
-      data-ripple-dark={variant === "outlined" || variant === "text" ? "true" : undefined}
     >
       {children}
     </button>

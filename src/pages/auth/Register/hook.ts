@@ -36,6 +36,7 @@ const useRegisterForm = () => {
           setIsVerifyModal(true);
         }
       } catch (error) {
+        console.log("error", error)
         toast.error('Registration failed!');
       }
     }

@@ -23,28 +23,27 @@ const useSignInForm = () => {
         .required('Password is required')
     }),
     onSubmit: async (values) => {
-      const { nextStep } = await signIn({
-        username: values.email,
-        password: values.password
-      });
-
-      console.log('nextStep', nextStep);
-
-      // if (nextStep.signInStep === "CONTINUE_SIGN_IN_WITH_EMAIL_SETUP") {
-      //   await confirmSignIn({
-      //     challengeResponse: values.email,
-      //   });
-      // }
-
-      if (nextStep.signInStep === 'CONFIRM_SIGN_UP') {
-        setIsVerifyModal(true);
-      }
-
-      if (nextStep.signInStep === 'DONE') {
-        navigate('/');
-      }
+      handleLogin(values)
     }
   });
+
+  const handleLogin = async (values: {
+    email: string;
+    password: string;
+}) => {
+    const { nextStep } = await signIn({
+      username: values.email,
+      password: values.password
+    });
+
+    if (nextStep.signInStep === 'CONFIRM_SIGN_UP') {
+      setIsVerifyModal(true);
+    }
+
+    if (nextStep.signInStep === 'DONE') {
+      navigate('/');
+    }
+  }
 
   const handleVerifyEmail = async () => {
     try {
@@ -54,7 +53,7 @@ const useSignInForm = () => {
       });
       if (nextStep.signUpStep === 'DONE') {
         toast.success('Email verified successfully!');
-        navigate('/');
+        await handleLogin(formik.values)
       }
     } catch (error) {
       toast.error("Verification email failed!");

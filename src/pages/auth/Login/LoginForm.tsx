@@ -129,7 +129,7 @@ const LoginForm: React.FC = () => {
       </div>
       <VerifyEmailModal 
         open={isVerifyModal}
-        verifyEmail={""}
+        verifyEmail={formik.values.email}
         onSubmit={() => handleVerifyEmail()}
         verifyCode={verifyCode}
         onChangeVerifyCode={(values: string[]) => setVerifyCode(values)}
