@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { confirmSignIn, confirmSignUp, signIn } from 'aws-amplify/auth';
+import { confirmSignIn, confirmSignUp, signIn, signInWithRedirect, SignInWithRedirectInput } from 'aws-amplify/auth';
 import { AuthContext, AuthContextProps } from '@/components/Layout/AuthLayout';
 import { toast } from 'react-toastify';
 
@@ -57,10 +57,17 @@ const useSignInForm = () => {
         navigate('/');
       }
     } catch (error) {
-      console.log("erorr", error)
       toast.error("Verification email failed!");
     } finally {
       setIsVerifyModal(false);
+    }
+  }
+
+  const handleLoginBySocial = async (input: SignInWithRedirectInput) => {
+    try {
+      await signInWithRedirect(input);
+    } catch (error) {
+      toast.error('Failed to login with social media');
     }
   }
 
@@ -70,7 +77,8 @@ const useSignInForm = () => {
     setVerifyCode,
     isVerifyModal,
     setIsVerifyModal,
-    handleVerifyEmail
+    handleVerifyEmail,
+    handleLoginBySocial
   };
 };
 

@@ -1,12 +1,9 @@
-import { getCurrentUser } from 'aws-amplify/auth';
 import { useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { getCurrentUser } from 'aws-amplify/auth';
+import { Outlet, useNavigate } from 'react-router-dom';
 
-interface PrivateRouterProps {
-  children: React.ReactNode;
-}
 
-const PrivateRouter: React.FC<PrivateRouterProps> = ({ children }) => {
+const PrivateRouter: React.FC = () => {
   const navigate = useNavigate()
   const [auth, setAuth] = useState<boolean>(false);
 
@@ -31,7 +28,7 @@ const PrivateRouter: React.FC<PrivateRouterProps> = ({ children }) => {
     isAuthenticated();
 }, []);
 
-  return auth ? children : null;
+  return auth ? <Outlet/> : null;
 }
 
 export default PrivateRouter
