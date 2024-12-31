@@ -1,31 +1,20 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { Suspense } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { RouterProvider } from 'react-router-dom';
 
-const Home = lazy(async () => await import("./pages/home"));
-const Login = lazy(async () => await import("./pages/auth/Login"));
-const Register = lazy(async () => await import("./pages/auth/Register"));
+import { router } from './components/Routers';
+
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Home/>,
-    },
-    {
-      path: "/login",
-      element: <Login/>,
-    },
-    {
-      path: "/register",
-      element: <Register/>,
-    },
-  ]);
-
   return (
     <Suspense>
       <RouterProvider router={router} />
+      <ToastContainer 
+        position='top-right'
+        theme='light'
+      />
     </Suspense>
-  )
+  );
 }
 
-export default App
+export default App;
