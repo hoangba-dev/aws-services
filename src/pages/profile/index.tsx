@@ -1,17 +1,24 @@
 import { FC } from 'react';
-import BaseButton from '@/components/Button/BaseButton';
+import { Button } from "@/components/ui/button";
 import { useAccount } from '@/provides/AccountProvider';
+import Avatar from '@/components/Avatar';
 
 const Profile: FC = () => {
   const { actions } = useAccount()
   return (
     <div>
-      <BaseButton
-        color='red'
+      <Avatar
+        onImageChange={() => {}}
+      />
+      <Button>
+        Save
+      </Button>
+      <Button
+        variant='destructive'
         onClick={() => actions.deleteAccount()}
       >
         Delete Account
-      </BaseButton>
+      </Button>
     </div>
   )
 }

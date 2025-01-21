@@ -2,9 +2,10 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { confirmSignIn, confirmSignUp, signIn, signInWithRedirect, SignInWithRedirectInput } from 'aws-amplify/auth';
+import { confirmSignUp, signIn, signInWithRedirect, SignInWithRedirectInput } from 'aws-amplify/auth';
 import { AuthContext, AuthContextProps } from '@/components/Layout/AuthLayout';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 const useSignInForm = () => {
   const navigate = useNavigate();
@@ -31,17 +32,33 @@ const useSignInForm = () => {
     email: string;
     password: string;
 }) => {
-    const { nextStep } = await signIn({
-      username: values.email,
-      password: values.password
-    });
-
-    if (nextStep.signInStep === 'CONFIRM_SIGN_UP') {
-      setIsVerifyModal(true);
-    }
-
-    if (nextStep.signInStep === 'DONE') {
-      navigate('/');
+    try {
+      const { nextStep } = await signIn({
+        username: values.email,
+        password: values.password
+      });
+  
+      if (nextStep.signInStep === 'CONFIRM_SIGN_UP') {
+        setIsVerifyModal(true);
+      }
+  
+      if (nextStep.signInStep === 'DONE') {
+        navigate('/');
+      }
+      toast({
+        title: 'Login successfully!',
+        duration :10000,
+      })
+    } catch(error) {
+      console.log("error", error);
+      toast({
+        title: 'Login failed!',
+        variant: 'destructive',
+        className: cn(
+          'top-0 right-0 '
+        ),
+        
+      })
     }
   }
 
@@ -52,11 +69,17 @@ const useSignInForm = () => {
         confirmationCode: verifyCode.join('')
       });
       if (nextStep.signUpStep === 'DONE') {
-        toast.success('Email verified successfully!');
+        toast({
+          title: 'Email verified successfully!',
+          variant: 'default',
+        })
         await handleLogin(formik.values)
       }
     } catch (error) {
-      toast.error("Verification email failed!");
+      toast({
+        title: 'Verification email failed!',
+        variant: 'destructive',
+      })
     } finally {
       setIsVerifyModal(false);
     }
@@ -66,7 +89,10 @@ const useSignInForm = () => {
     try {
       await signInWithRedirect(input);
     } catch (error) {
-      toast.error('Failed to login with social media');
+      toast({
+        title: 'Failed to login with social media',
+        variant: 'destructive',
+      })
     }
   }
 

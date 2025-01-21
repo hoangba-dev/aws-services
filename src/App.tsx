@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import { RouterProvider } from 'react-router-dom';
 
 import { router } from './components/Routers';
+import { Toaster } from './components/ui/toaster';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         position='top-right'
         theme='light'
       />
+      <Toaster />
     </Suspense>
   );
 }

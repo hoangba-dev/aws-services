@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { signOut } from "aws-amplify/auth";
 import BaseButton from "@/components/Button/BaseButton";
+import { signOut } from "aws-amplify/auth";
+import { CalendarForm } from "@/components/Input/InputDate";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ const Home: React.FC = () => {
     <BaseButton onClick={() => navigate('/profile')}>
       Profile
     </BaseButton>
+
+    <div className="w-max">
+      <CalendarForm/>
+    </div>
   </div>;
 };
 
